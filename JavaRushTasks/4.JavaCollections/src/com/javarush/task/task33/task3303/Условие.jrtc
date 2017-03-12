@@ -1,0 +1,8 @@
+<div class="wdghtml" taskKey="com.javarush.task.task33.task3303">
+<h3>Десериализация JSON объекта</h3>
+<p><strong>НЕОБХОДИМО:</strong> подключенные библиотеки <strong>Jackson</strong> <strong>Core</strong>, <strong>Bind</strong> и <strong>Annotation</strong> версии <span class="text-user"><strong>2.6.1</strong></span></p>
+<p>В метод <mark>convertFromJsonToNormal</mark> <strong>первым</strong> параметром приходит имя файла, который содержит один <span class="text-neon">ДЖЕЙСОН</span> объект.<br />
+<strong>Вторым</strong> параметром приходит имя класса, объект которого находится в файле.<br />
+Метод <mark>convertFromJsonToNormal</mark> должен вычитать объект из файла, преобразовать его из <span class="text-neon">JSON</span> и вернуть.</p>
+
+</div>

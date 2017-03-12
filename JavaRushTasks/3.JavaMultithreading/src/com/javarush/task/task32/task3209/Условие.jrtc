@@ -1,0 +1,346 @@
+<div class="wdghtml" taskKey="com.javarush.task.task32.task3209.big24">
+<h3>HTML Editor (24)</h3>
+<p>Твой <strong>html</strong> редактор готов!<br />
+Ты научился:<br />
+&#8212; Создавать приложения с графическим интерфейсом.<br />
+&#8212; Работать с диалоговыми окнами.<br />
+&#8212; Пользоваться классами из библиотеки <span class="text-corporate"><strong>Swing</strong></span>.<br />
+&#8212; Реализовывать взаимодействие компонентов программы с помощью событий, слушателей, действий.<br />
+&#8212; Усилил свои знания в области <strong>MVC</strong>.</p>
+<p>Что можно улучшить в разработанном редакторе:<br />
+&#8212; Добавить панель инструментов, повторяющую функционал меню.<br />
+&#8212; Добавить подсветку <strong>html</strong> тегов на второй вкладке.<br />
+&#8212; Добавить возможность загрузки документа из Интернет.<br />
+&#8212; Расширить возможности редактора (<em>вставка картинки, ссылки и т.д.</em>)</p>
+<p><strong>Поздравляю, так держать!</strong></p>
+
+<hr>
+<h3>HTML Editor (23)</h3>
+<p>23.1. Напишем метод для сохранения открытого файла <mark>saveDocument(</mark>). Метод должен работать также, как <mark>saveDocumentAs()</mark>, но не запрашивать файл у пользователя, а использовать currentFile. Если <strong><span class="text-corporate">currentFile</span></strong> равен <span class="text-neon"><strong>null</strong></span>, то вызывать метод <mark>saveDocumentAs()</mark>.<br />
+23.2. Пришло время реализовать метод <mark>openDocument()</mark>. Метод должен работать аналогично методу <mark>saveDocumentAs()</mark>, в той части, которая отвечает за выбор файла.</p>
+<p><strong>Подсказка:</strong> <em>Обрати внимание на имя метода для показа диалогового окна.</em></p>
+<p><strong>Когда файл выбран, необходимо:</strong><br />
+23.2.1. Установить новое значение <span class="text-corporate"><strong>currentFile</strong></span>.<br />
+23.2.2. Сбросить документ.<br />
+23.2.3. Установить имя файла в заголовок у представления.<br />
+23.2.4. Создать <span class="text-corporate"><strong>FileReader</strong></span>, используя <span class="text-corporate"><strong>currentFile</strong></span>.<br />
+23.2.5. Вычитать данные из <span class="text-corporate"><strong>FileReader</strong></span>-а в документ document с помощью объекта класса <span class="text-corporate"><strong>HTMLEditorKit</strong></span>.<br />
+23.2.6. Сбросить правки (<em>вызвать метод </em><mark>resetUndo</mark><em> представления</em>).<br />
+23.2.7. Если возникнут исключения &#8212; залогируй их и не пробрасывай наружу.<br />
+Проверь работу пунктов меню Сохранить и Открыть.</p>
+
+<hr>
+<h3>HTML Editor (22)</h3>
+<p>Реализуем в контроллере метод для сохранения файла под новым именем <mark>saveDocumentAs()</mark>.<br />
+Реализация должна:<br />
+22.1. Переключать представление на <strong>html</strong> вкладку.<br />
+22.2. Создавать новый объект для выбора файла <span class="text-corporate"><strong>JFileChooser</strong></span>.<br />
+22.3. Устанавливать ему в качестве фильтра объект <span class="text-corporate"><strong>HTMLFileFilter</strong></span>.<br />
+22.4. Показывать диалоговое окно &#171;<em><strong>Save File</strong></em>&#187; для выбора файла.<br />
+22.5. Если пользователь подтвердит выбор файла:<br />
+22.5.1. Сохранять выбранный файл в поле currentFile.<br />
+22.5.2. Устанавливать имя файла в качестве заголовка окна представления.<br />
+22.5.3. Создавать <span class="text-corporate"><strong>FileWriter</strong></span> на базе <span class="text-corporate"><strong>currentFile</strong></span>.<br />
+22.5.4. Переписывать данные из документа <span class="text-corporate"><strong>document</strong></span> в объекта <span class="text-corporate"><strong>FileWriter</strong></span>-а аналогично тому, как мы это делали в методе <mark>getPlainText()</mark>.<br />
+22.6. Метод не должен кидать исключения.<br />
+Проверь работу пункта меню Сохранить как&#8230;</p>
+
+<hr>
+<h3>HTML Editor (21)</h3>
+<p>Для открытия или сохранения файла мы будем использовать <span class="text-corporate"><strong>JFileChooser</strong></span> из библиотеки <span class="text-corporate"><strong>swing</strong></span>.<br />
+Объекты этого типа поддерживают фильтры, унаследованные от <span class="text-corporate"><strong>FileFilter</strong></span>. Сейчас мы напишем свой фильтр:<br />
+21.1. Создай публичный класс <span class="text-corporate"><strong>HTMLFileFilter</strong></span> унаследованный от <span class="text-corporate"><strong>FileFilter</strong></span>.<br />
+21.2. Мы хотим, чтобы окно выбора файла отображало только <strong>html/htm</strong> файлы или папки.<br />
+Переопредели метод <mark>accept(File file)</mark>, чтобы он возвращал true, если переданный файл директория или содержит в конце имени &#171;<em><strong>.html</strong></em>&#187; или &#171;<em><strong>.htm</strong></em>&#187; без учета регистра.<br />
+21.3. Чтобы в окне выбора файла в описании доступных типов файлов отображался текст &#171;<em><strong>HTML и HTM файлы</strong></em>&#187; переопредели соответствующим образом метод <mark>getDescription()</mark>.</p>
+
+<hr>
+<h3>HTML Editor (20)</h3>
+<p>20.1. Реализуй метод создания нового документа <mark>createNewDocument(</mark>) в контроллере. <strong>Он должен:</strong><br />
+20.1.1. Выбирать <strong>html</strong> вкладку у представления.<br />
+20.1.2. Сбрасывать текущий документ.<br />
+20.1.3. Устанавливать новый заголовок окна, например: &#171;<em><strong>HTML редактор</strong></em>&#171;. Воспользуйся методом setTitle(), который унаследован в нашем представлении.<br />
+20.1.4. Сбрасывать правки в <strong>Undo</strong> менеджере. Используй метод resetUndo представления.<br />
+20.1.5. Обнулить переменную <mark class="user">currentFile</mark>.<br />
+20.2. Реализуй метод инициализации <mark>init()</mark> контроллера. Он должен просто вызывать метод создания нового документа.<br />
+Проверь работу пункта меню Новый.</p>
+
+<hr>
+<h3>HTML Editor (19)</h3>
+<p>Реализуем метод <mark>actionPerformed(ActionEvent actionEvent)</mark> у представления, этот метод наследуется от интерфейса <strong><span class="text-yellow">ActionListener</span></strong> и будет вызваться при выборе пунктов меню, у которых наше представление указано в виде слушателя событий.<br />
+19.1. Получи из события команду с помощью метода <mark>getActionCommand()</mark>. Это будет обычная строка. По этой строке ты можешь понять какой пункт меню создал данное событие.<br />
+19.2. Если это команда &#171;<strong><em>Новый</em></strong>&#171;, вызови у контроллера метод <mark>createNewDocument()</mark>. В этом пункте и далее, если необходимого метода в контроллере еще нет &#8212; создай заглушки.<br />
+19.3. Если это команда &#171;<em><strong>Открыть</strong></em>&#171;, вызови метод <mark>openDocument()</mark>.<br />
+19.4. Если &#171;<em><strong>Сохранить</strong></em>&#171;, то вызови <mark>saveDocument()</mark>.<br />
+19.5. Если &#171;<em><strong>Сохранить как&#8230;</strong></em>&#187; &#8212; <mark>saveDocumentAs()</mark>.<br />
+19.6. Если &#171;<em><strong>Выход</strong></em>&#187; &#8212; <mark>exit()</mark>.<br />
+19.7. Если &#171;<em><strong>О программе</strong></em>&#171;, то вызови метод <mark>showAbout()</mark> у представления.<br />
+Проверь, что заработали пункты меню Выход и О программе.</p>
+
+<hr>
+<h3>HTML Editor (18)</h3>
+<p>Реализуй метод <mark>selectedTabChanged()</mark> представления. Этот метод вызывается, когда произошла смена выбранной вкладки. <strong>Итак:</strong><br />
+18.1. Метод должен проверить, какая вкладка сейчас оказалась выбранной.<br />
+18.2. Если выбрана вкладка с индексом <span class="text-user"><strong>0</strong></span> (<strong>html</strong> <em>вкладка</em>), значит нам нужно получить текст из <strong><span class="text-corporate">plainTextPane</span></strong> и установить его в контроллер с помощью метода <mark><strong>setPlainText</strong></mark>.<br />
+18.3. Если выбрана вкладка с индексом <strong>1</strong> (<em>вкладка с </em><strong>html</strong><em> текстом</em>), то необходимо получить текст у контроллера с помощью метода <mark>getPlainText()</mark> и установить его в панель <strong>plainTextPane</strong>.<br />
+18.4. Сбросить правки (<em>вызвать метод</em> <mark>resetUndo</mark> <em>представления</em>).</p>
+
+<hr>
+<h3>HTML Editor (17)</h3>
+<p>Добавь метод<mark> String getPlainText(</mark>) в контроллер. Он должен получать текст из документа со всеми html тегами.<br />
+17.1. Создай объект <strong><span class="text-corporate">StringWriter</span></strong>.<br />
+17.2. Перепиши все содержимое из документа document в созданный объект с помощью<br />
+метода write класса <span class="text-corporate"><strong>HTMLEditorKit</strong></span>.<br />
+17.3. Как обычно, метод не должен кидать исключений.</p>
+
+<hr>
+<h3>HTML Editor (16)</h3>
+<p>Добавь метод <mark>setPlainText(String text)</mark> в контроллер. Он будет записывать переданный текст с <strong>html</strong> тегами в документ document. <strong>При его реализации:</strong><br />
+16.1. Сбрось документ.<br />
+16.2. Создай новый реадер <mark>StringReader</mark> на базе переданного текста.<br />
+16.3. Вызови метод <mark>read()</mark> из класса <strong><span class="text-corporate">HTMLEditorKit</span></strong>, который вычитает данные из реадера в<br />
+документ <strong>document</strong>.<br />
+16.4. Проследи, чтобы метод не кидал исключения. Их необходимо просто логировать.</p>
+
+<hr>
+<h3>HTML Editor (15)</h3>
+<p>Добавь в контроллер метод <mark>resetDocument()</mark>, который будет сбрасывать текущий документ. <strong>Он должен:</strong><br />
+15.1. Удалять у текущего документа <strong>document</strong> слушателя правок которые можно отменить/вернуть (<em>найди подходящий для этого метод, унаследованный от</em> <strong><span class="text-corporate">AbstractDocument</span></strong>). Слушателя нужно запросить у представления (<em>метод</em> <mark>getUndoListener()</mark>).<br />
+Не забудь проверить, что текущий документ существует (<em>не</em> <span class="text-neon"><strong>null</strong></span>).<br />
+15.2. Создавать новый документ по умолчанию и присваивать его полю document.</p>
+<p><strong>Подсказка:</strong> <em>воспользуйся подходящим методом класса</em> <span class="text-corporate"><strong>HTMLEditorKit</strong></span>.</p>
+<p>15.3. Добавлять новому документу слушателя правок.<br />
+15.4. Вызывать у представления метод <mark>update()</mark>.</p>
+
+<hr>
+<h3>HTML Editor (14)</h3>
+<p>14.1. Добавь в класс представления метод <mark>selectHtmlTab()</mark>. <strong>Он должен:</strong><br />
+14.1.1. Выбирать <strong>html</strong> вкладку (<em>переключаться на нее</em>).<br />
+14.1.2. Сбрасывать все правки с помощью метода, который ты реализовал ранее.<br />
+14.2. Добавь в класс контроллера геттер для модели, в нашем случае это поле <strong>document</strong>.<br />
+14.3. Добавь в представление метод<mark> update()</mark>, который должен получать документ у контроллера и устанавливать его в панель редактирования <strong>htmlTextPane</strong>.<br />
+14.4. Добавь в представление метод <mark>showAbout()</mark>, который должен показывать диалоговое окно с информацией о программе. Информацию придумай сам, а вот тип сообщения должен быть <strong><span class="text-neon">JOptionPane.INFORMATION_MESSAGE</span></strong>.</p>
+
+<hr>
+<h3>HTML Editor (13)</h3>
+<p>Реализуем класс <span class="text-corporate"><strong>TextEditMenuListener</strong></span> в пакет <span class="text-red"><strong>listeners</strong></span>. Этот класс будет работать аналогично классу <span class="text-corporate"><strong>UndoMenuListener</strong></span> только для других пунктов меню. Пункты меню, отвечающие за стиль, шрифт, цвет и т.д. должны быть доступны только тогда, когда в нашем редакторе выбрана первая вкладка.<br />
+13.1. Добавь в представление метод <mark>boolean isHtmlTabSelected(</mark>). Он должен возвращать true, если выбрана вкладка, отображающая <strong>html</strong> в панели вкладок (<em>подсказка: ее индекс 0</em>).<br />
+13.2. Добавь в класс <span class="text-corporate"><strong>TextEditMenuListener</strong></span> поле <span class="text-corporate"><strong>View</strong></span>, проинициализируй его в конструкторе класса.<br />
+13.3. В классе TextEditMenuListener переопредели метод <mark>menuSelected(MenuEvent <strong>menuEvent</strong>)</mark>. <strong>Он должен:</strong><br />
+13.3.1. Из переданного параметра получать объект, над которым было совершено действие. В нашем случае это будет объект с типом <span class="text-corporate"><strong>JMenu</strong></span>.<br />
+13.3.2. У полученного меню получать список компонентов (<em>пунктов меню</em>).<br />
+13.3.3. Для каждого пункта меню вызывать метод <mark>setEnabled</mark>, передав в качестве параметра результат вызова метода <mark>isHtmlTabSelected()</mark> из представления. Запусти приложение и убедись, что пункты меню стиль, выравнивание, цвет и шрифт доступны только, когда активна закладка <strong>HTML</strong> и не доступны для закладки Текст.</p>
+
+<hr>
+<h3>HTML Editor (12)</h3>
+<p>12.1. Напиши реализацию класса <strong><span class="text-corporate">RedoAction</span></strong>:<br />
+12.1.1. Добавь в класс поле <span class="text-corporate"><strong>View</strong></span>. Добавь его инициализацию в конструкторе.<br />
+12.1.2. Реализуй метод <mark>actionPerformed(ActionEvent <strong>actionEvent</strong>)</mark>, он должен вызывать метод <mark>redo()</mark> у представления.<br />
+12.2. Напиши реализацию класса <span class="text-corporate"><strong>UndoAction</strong></span> по аналогии с <span class="text-corporate"><strong>RedoAction</strong></span>.<br />
+12.3. Изучи реализацию класса <span class="text-corporate"><strong>StrikeThroughAction</strong></span>, которую ты получил вместе с заданием и реализуй аналогичным образом классы:<br />
+12.3.1. <span class="text-corporate"><strong>SubscriptAction</strong></span><br />
+12.3.2. <span class="text-corporate"><strong>SuperscriptAction</strong></span><br />
+Запусти программу и убедись, что пункты меню Подстрочный знак, Надстрочный знак и Зачеркнутый работают. Пункты, отвечающие за отмену и возврат действия пока не подключены к контроллеру и мы не сможем их проверить.</p>
+
+<hr>
+<h3>HTML Editor (11)</h3>
+<p>11.1. Добавь в представление поле <span class="text-corporate"><strong>UndoManager</strong></span> <mark class="user">undoManager</mark>. Разберись для чего используется этот класс. Проинициализируй поле класса новым объектом.<br />
+11.2. Добавь класс <span class="text-corporate"><strong>UndoListener</strong></span> реализующий интерфейс <span class="text-yellow"><strong>UndoableEditListener</strong></span> в пакет <span class="text-red"><strong>listeners</strong></span>. Этот класс будет следить за правками, которые можно отменить или вернуть.<br />
+11.3. Добавь в класс <span class="text-corporate"><strong>UndoListener</strong></span>:<br />
+11.3.1. Поле <span class="text-corporate"><strong>UndoManager</strong></span> <mark class="user">undoManager</mark>.<br />
+11.3.2. Конструктор, который принимает <span class="text-corporate"><strong>UndoManager</strong></span> и инициализирует поле класса.<br />
+11.3.3. Метод <mark>undoableEditHappened(UndoableEditEvent e)</mark>. Он должен из переданного события получать правку и добавлять ее в <span class="text-corporate"><strong>undoManager</strong></span>.<br />
+11.4. Добавь в представление поле <span class="text-corporate"><strong>UndoListener</strong></span> <mark class="user">undoListener</mark>, проинициализируй его используя <span class="text-corporate"><strong>undoManager</strong></span>.<br />
+11.5. Добавь в представление методы:<br />
+11.5.1. <mark>void undo()</mark> &#8212; отменяет последнее действие. Реализуй его используя undoManager.<br />
+Метод не должен кидать исключений, логируй их.<br />
+11.5.2. <mark>void redo()</mark> &#8212; возвращает ранее отмененное действие. Реализуй его по аналогии с предыдущим пунктом.<br />
+11.5.3. Реализуй методы <mark>boolean canUndo()</mark> и <mark>boolean canRedo(</mark>) используя <span class="text-corporate"><strong>undoManager</strong></span>.<br />
+11.5.4. Реализуй геттер для <span class="text-corporate"><strong>undoListener</strong></span>.<br />
+11.5.5. Добавь и реализуй метод <mark>void resetUndo()</mark>, который должен сбрасывать все правки в менеджере <span class="text-corporate"><strong>undoManager</strong></span>.</p>
+
+<hr>
+<h3>HTML Editor (10)</h3>
+<p>Наш редактор будет поддерживать механизм <strong>отмены</strong>/<strong>возврата</strong> (<em>undo/redo</em>) действий в<br />
+редакторе.<br />
+Реализуй класс <strong><span class="text-corporate">UndoMenuListener</span></strong>. Этот слушатель будет следить за меню, а если конкретнее, то за моментом, когда меню редактирования будет выбрано пользователем. В этот момент он будет запрашивать у представления можем ли мы сейчас отменить или вернуть какое-то действие, и в зависимости от этого делать доступными или не доступными пункты меню &#171;<em><strong>Отменить</strong></em>&#187; и &#171;<em><strong>Вернуть</strong></em>&#171;.<br />
+10.1. Добавь в класс <span class="text-corporate"><strong>UndoMenuListener</strong></span> следующие поля:<br />
+10.1.1. Представление <span class="text-corporate"><strong>View</strong></span> <mark class="user">view</mark>.<br />
+10.1.2. Пункт меню &#171;<em><strong>Отменить</strong></em>&#187; <strong>JMenuItem undoMenuItem</strong>.<br />
+10.1.3. Пункт меню &#171;<em><strong>Вернуть</strong></em>&#187; <strong>JMenuItem redoMenuItem</strong>.<br />
+10.2. Реализуй конструктор <mark>UndoMenuListener(View <strong>view</strong>, JMenuItem <strong>undoMenuItem</strong>, JMenuItem <strong>redoMenuItem</strong>)</mark>, он должен инициализировать поля класса.<br />
+10.3. Реализуй метод <mark>menuSelected(MenuEvent <strong>menuEvent</strong>)</mark>. Он будет вызываться перед показом меню. <strong>Он должен:</strong><br />
+10.3.1. Спрашивать у представления можем ли мы отменить действие с помощью метода <mark>boolean canUndo()</mark>. Пока у представления нет такого метода, поэтому добавь заглушку, которая всегда возвращает <span class="text-neon"><strong>false</strong></span>.<br />
+10.3.2. Делать доступным или не доступным пункт меню <strong>undoMenuItem</strong> в зависимости от того, что нам вернуло представление.</p>
+<p><strong>Подсказка:</strong> <em>используй метод</em> <mark>setEnabled()</mark>.</p>
+<p>10.3.3. Аналогично поступи и для пункта меню <strong>redoMenuItem</strong>, добавив метод-заглушку <mark>canRedo()</mark> в представление.<br />
+Запусти программу и убедись, что пункты меню Отменить и Вернуть недоступны.</p>
+
+<hr>
+<h3>HTML Editor (9)</h3>
+<p>9.1. Реализуй метод <mark>initMenuBar()</mark>. <strong>Он должен:</strong><br />
+9.1.1. Создавать новый объект типа <strong><span class="text-corporate">JMenuBar</span></strong>. Это и будет наша панель меню.<br />
+9.1.2. С помощью <span class="text-corporate"><strong>MenuHelper</strong></span> инициализировать меню в следующем порядке: <strong>Файл</strong>, <strong>Редактировать</strong>, <strong>Стиль</strong>, <strong>Выравнивание</strong>, <strong>Цвет</strong>, <strong>Шрифт</strong> и <strong>Помощь</strong>.<br />
+9.1.3. Добавлять в верхнюю часть панели контента текущего фрейма нашу панель меню, аналогично тому, как это мы делали с панелью вкладок.<br />
+9.2. Добавь конструктор класса <span class="text-corporate"><strong>View</strong></span>. Он должен устанавливать внешний вид и поведение (<em>look and feel</em>) нашего приложения такими же, как это определено в системе.<br />
+Конструктор не должен кидать исключений, только логировать их с помощью <span class="text-corporate"><strong>ExceptionHandler</strong></span>.</p>
+<p><strong>Подсказа:</strong> <em>для реализации задания используй класс</em> <span class="text-corporate"><strong>UIManager</strong></span>.</p>
+<p>Запусти приложение, теперь ты должен видеть панель с меню вверху окна. Некоторые из пунктов меню (<em>например:</em> <strong>Вырезать</strong>, <strong>Копировать</strong>, <strong>Вставить</strong>, <strong>Стиль</strong> (<em>частично</em>), <strong>Выравнивание</strong>, <strong>Цвет</strong>, <strong>Шрифт</strong>) должны уже работать. Убедись, что все работает и только затем продолжи разработку.</p>
+
+<hr>
+<h3>HTML Editor (8)</h3>
+<p>Пришло время добавить все необходимые пункты меню и написать классы действий, выполняемые при нажатии. Это довольно трудоемкая и рутинная работа, а ты отличный ученик и не хотелось бы тебя огорчать. Поэтому, в качестве бонуса ты получаешь готовый класс <span class="text-corporate"><strong>MenuHelper</strong></span>! <strong>А ты:</strong><br />
+8.1. Напиши в пакете <strong><span class="text-red">actions</span></strong> заглушки для следующих классов:<br />
+8.1.1. Класс отмены действия <mark>UndoAction</mark>. Он должен наследоваться от <strong><span class="text-corporate">AbstractAction</span></strong> и содержать конструктор <mark>UndoAction(View <strong>view</strong>)</mark>.<br />
+8.1.2. Класс возврата действия <mark>RedoAction</mark>. Требования аналогичны требованиям к <mark>UndoAction</mark>.<br />
+8.1.3. Класс <strong><span class="text-corporate">StrikeThroughAction</span></strong>, который отвечает за стиль текста &#171;<em><strong>Зачеркнутый</strong></em>&#171;. Унаследуй его от <mark class="user">StyledEditorKit.StyledTextAction</mark>.<br />
+8.1.4. Класс <span class="text-corporate"><strong>SubscriptAction</strong></span>, который отвечает за стиль текста &#171;<em><strong>Подстрочный знак</strong></em>&#171;. Его также унаследуй его от <mark class="user">StyledEditorKit.StyledTextAction</mark>.<br />
+8.1.5. Класс <span class="text-corporate"><strong>SuperscriptAction</strong></span>. Он будет отвечать за стиль &#171;<em><strong>Надстрочный знак</strong></em>&#171;. Добавь ему правильный родительский класс.<br />
+8.2. Напиши в пакете <span class="text-red"><strong>listeners</strong></span> заглушки для классов:<br />
+8.2.1. UndoMenuListener, он должен реализовывать интерфейс <span class="text-yellow"><strong>MenuListener</strong></span> и иметь конструктор <mark>UndoMenuListener(View view, JMenuItem undoMenuItem, JMenuItem redoMenuItem)</mark>. Чем он будет заниматься узнаешь чуть позже.<br />
+8.2.2. <mark>TextEditMenuListener</mark>. Этот класс также должен реализовывать интерфейс <span class="text-yellow"><strong>MenuListener</strong></span>.<br />
+Добавь ему конструктор <mark>TextEditMenuListener(View view)</mark>. В следующих заданиях мы рассмотрим его детальнее.</p>
+
+<hr>
+<h3>HTML Editor (7)</h3>
+<p>Добавь класс <span class="text-corporate"><strong>MenuHelper</strong></span>. Это будет вспомогательный класс для инициализации и настройки<br />
+меню.<br />
+<strong>У меню будет следующая структура:</strong><br />
+<em>&#8212; Файл</em><br />
+<em> &#8212; Новый</em><br />
+<em> &#8212; Открыть</em><br />
+<em> &#8212; Сохранить</em><br />
+<em> &#8212; Сохранить как&#8230;</em><br />
+<em> &#8212; Выход</em></p>
+<p><em>&#8212; Редактировать</em><br />
+<em> &#8212; Отменить</em><br />
+<em> &#8212; Вернуть</em><br />
+<em> &#8212; Вырезать</em><br />
+<em> &#8212; Копировать</em><br />
+<em> &#8212; Вставить</em></p>
+<p><em>&#8212; Стиль</em><br />
+<em> &#8212; Полужирный</em><br />
+<em> &#8212; Подчеркнутый</em><br />
+<em> &#8212; Курсив</em><br />
+<em> &#8212; Подстрочный знак</em><br />
+<em> &#8212; Надстрочный знак</em><br />
+<em> &#8212; Зачеркнутый</em></p>
+<p><em>&#8212; Выравнивание</em><br />
+<em> &#8212; По левому краю</em><br />
+<em> &#8212; По центру</em><br />
+<em> &#8212; По правому краю</em></p>
+<p><em>&#8212; Цвет</em><br />
+<em> &#8212; Красный</em><br />
+<em> &#8212; Оранжевый</em><br />
+<em> &#8212; Желтый</em><br />
+<em> &#8212; Зеленый</em><br />
+<em> &#8212; Синий</em><br />
+<em> &#8212; Голубой</em><br />
+<em> &#8212; Пурпурный</em><br />
+<em> &#8212; Черный</em></p>
+<p><em>&#8212; Шрифт</em><br />
+<em> &#8212; Шрифт</em><br />
+<em> &#8212; SansSerif, Serif, Monospaced, Dialog, DialogInput,</em><br />
+<em> &#8212; Размер шрифта</em><br />
+<em> &#8212; 6, 8, 10, 12, 14, 16, 20, 24, 32, 36, 48, 72</em></p>
+<p><em>&#8212; Помощь</em><br />
+<em> &#8212; О программе</em></p>
+<p>7.1. Реализуй в <span class="text-corporate"><strong>MenuHelper</strong></span> статический метод <mark>JMenuItem addMenuItem(JMenu <strong>parent</strong>, String <strong>text</strong>, ActionListener <strong>actionListener</strong>)</mark>, где <mark class="user">parent</mark> &#8212; меню в которое мы добавляем пункт, <mark class="user">text</mark> &#8212; текст добавляемого пункта, <mark class="user">actionListener</mark> &#8212; слушатель действий добавляемого пункта меню. Он должен:<br />
+7.1.1. Создавать новый пункт меню <strong>JMenuItem</strong>, используя <strong>text</strong>.<br />
+7.1.2. Устанавливать этому пункту слушателя действий с помощью метода <mark>addActionListener()</mark>.<br />
+7.1.3. Добавлять в parent созданный пункт меню.<br />
+7.1.4. Возвращать созданный пункт меню.<br />
+7.2. Реализуй статический метод <mark>JMenuItem addMenuItem(JMenu <strong>parent</strong>, Action <strong>action</strong>)</mark>. Этот метод аналогичен предыдущему, но в качестве параметра принимает действие action, которое необходимо выполнить при выборе пункта меню.</p>
+<p><strong>Подсказка:</strong> <em>при создании </em><strong>JMenuItem</strong><em> передай в конструктор </em><strong>action</strong><em>. Разберись откуда возьмется имя пункта меню, если его не устанавливать дополнительно.</em></p>
+<p>7.3. Реализуй статический метод <mark>JMenuItem addMenuItem(JMenu <strong>parent</strong>, String <strong>text</strong>, Action <strong>action</strong>)</mark>, который добавляет в parent новый пункт меню с текстом text и действием action при выборе этого метода. При реализации используй вызов метода из предыдущего пункта.<br />
+7.4. Добавь в <span class="text-corporate"><strong>MenuHelper</strong></span> заглушки для следующих статический методов:<br />
+7.4.1. <mark>void initHelpMenu(View <strong>view</strong>, JMenuBar <strong>menuBar</strong>)</mark> &#8212; инициализация меню помощи.<br />
+7.4.2. <mark>void initFontMenu(View <strong>view</strong>, JMenuBar <strong>menuBar</strong>)</mark> &#8212; инициализация меню выбора<br />
+шрифта.<br />
+7.4.3. <mark>void initColorMenu(View <strong>view</strong>, JMenuBar <strong>menuBar</strong>)</mark> &#8212; инициализация меню выбора цвета.<br />
+7.4.4. <mark>void initAlignMenu(View <strong>view</strong>, JMenuBar <strong>menuBar</strong>)</mark> &#8212; инициализация меню выравнивания.<br />
+7.4.5.<mark> void initStyleMenu(View <strong>view</strong>, JMenuBar <strong>menuBar</strong>)</mark> &#8212; инициализация меню выбора стиля текста.<br />
+7.4.6. <mark>void initEditMenu(View <strong>view</strong>, JMenuBar <strong>menuBar</strong>)</mark> &#8212; инициализация меню редактирования текста.<br />
+7.4.7. <mark>void initFileMenu(View <strong>view</strong>, JMenuBar <strong>menuBar</strong>)</mark> &#8212; инициализация меню Файл.</p>
+
+<hr>
+<h3>HTML Editor (6)</h3>
+<p>Реализуй метод инициализации панелей редактора <mark>initEditor()</mark>. <strong>Он должен:</strong><br />
+6.1. Устанавливать значение &#171;<em><strong>text/html</strong></em>&#187; в качестве типа контента для компонента <span class="text-red"><strong>htmlTextPane</strong></span>.<br />
+Найди и используй подходящий метод.<br />
+6.2. Создавать новый локальный компонент <span class="text-red"><strong>JScrollPane</strong></span> на базе <span class="text-red"><strong>htmlTextPane</strong></span>.<br />
+6.3. Добавлять вкладку в панель tabbedPane с именем &#171;<em><strong>HTML</strong></em>&#187; и компонентом из предыдущего<br />
+пункта.<br />
+6.4. Создавать новый локальный компонент <strong><span class="text-red">JScrollPane</span></strong> на базе <span class="text-red"><strong>plainTextPane</strong></span>.<br />
+6.5. Добавлять еще одну вкладку в <strong>tabbedPane</strong> с именем &#171;<em><strong>Текст</strong></em>&#187; и компонентом из<br />
+предыдущего пункта.<br />
+6.6. Устанавливать предпочтительный размер панели <strong>tabbedPane</strong>.<br />
+6.7. Создавать объект класса <strong><span class="text-corporate">TabbedPaneChangeListener</span></strong> и устанавливать его в качестве слушателя изменений в <strong>tabbedPane</strong>.<br />
+6.8. Добавлять по центру панели контента текущего фрейма нашу панель с вкладками.<br />
+Получить панель контента текущего фрейма можно с помощью метода <mark>getContentPane()</mark>, его реализация унаследовалась от <span class="text-corporate"><strong>JFrame</strong></span>.<br />
+После запуска приложения можно будет увидеть текущие результаты: две независимые закладки (<em>HTML и Текст</em>), в каждой из которых можно набирать свой текст.</p>
+
+<hr>
+<h3>HTML Editor (5)</h3>
+<p>5.1. Объяви класс <span class="text-corporate"><strong>TabbedPaneChangeListener</strong></span> реализующий интерфейс <span class="text-yellow"><strong>ChangeListener</strong></span> в пакете listeners. Этот класс будет слушать и обрабатывать изменения состояния панели вкладок.<br />
+Реализуй в этом классе:<br />
+5.1.1. Конструктор, принимающий представление в виде параметра и сохраняющий во внутреннее поле <mark class="user">view</mark> класса.<br />
+5.1.2. Переопредели метод из интерфейса <strong><span class="text-yellow">ChangeListener</span></strong>, он должен вызывать метод <mark>selectedTabChanged()</mark> у представления. Последнего метода еще нет, сделай для него заглушку.<br />
+5.2. Объяви класс <strong><span class="text-corporate">ExceptionHandler</span></strong>. Это будет наш обработчик исключительных ситуаций, который ты в дальнейшем сможешь переопределить. Пока добавь в него статический метод <mark>log(Exception e)</mark>, который будет выводить в консоль краткое описание проблемы (<em>используй метод </em><mark>toString</mark><em> у переданного исключения</em>).</p>
+
+<hr>
+<h3>HTML Editor (4)</h3>
+<p>4.1. Объяви методы <mark>initMenuBar()</mark> и <mark>initEditor()</mark> в классе <strong><span class="text-corporate">View</span></strong>. Они будут отвечать за инициализацию меню и панелей редактора.<br />
+4.2. Объяви в представлении метод<mark> initGui()</mark>. Он будет инициализировать графический интерфейс. Вызови из него инициализацию меню<mark> initMenuBar()</mark>, инициализацию редактора <mark>initEditor()</mark> и метод <mark>pack()</mark>, реализацию которого мы унаследовали от класса <span class="text-corporate"><strong>JFrame</strong></span>.<br />
+Разберись что делает метод <mark>pack()</mark>.<br />
+4.3. Реализуй метод <mark>init()</mark> представления. <strong>Он должен:</strong><br />
+4.3.1. Вызывать инициализацию графического интерфейса <mark>initGui()</mark>.<br />
+4.3.2. Добавлять слушателя событий нашего окна. В качестве подписчика создай и используй объект класса <span class="text-corporate"><strong>FrameListener</strong></span>. В качестве метода для добавления подписчика используй подходящий метод из класса <span class="text-corporate"><strong>Window</strong></span> от которого наследуется и наш класс через классы <span class="text-corporate"><strong>JFrame</strong></span> и <span class="text-corporate"><strong>Frame</strong></span>.<br />
+4.3.3. Показывать наше окно. Используй метод <mark>setVisible</mark> с правильным параметром.<br />
+На этом этапе приложение при запуске должно показывать окно, которое можно растягивать, разворачивать, закрыть и т.д.</p>
+
+<hr>
+<h3>HTML Editor (3)</h3>
+<p>Графический интерфейс будет представлять собой окно, в котором будет меню и панель с<br />
+двумя вкладками.<br />
+На первой вкладке будет располагаться текстовая панель, которая будет отрисовывать <strong>html</strong> страницу. На ней можно будет форматировать и редактировать текст страницы.<br />
+На второй вкладке будет редактор, который будет отображать код html страницы, в нем будут видны все используемые <strong>html</strong> теги. В нем также можно будет менять текст страницы, добавлять и удалять различные теги.<br />
+3.1. Добавь и проинициализируй поля в классе представления:<br />
+3.1.1. <strong>JTabbedPane tabbedPane</strong> &#8212; это будет панель с двумя вкладками.<br />
+3.1.2. <strong>JTextPane htmlTextPane</strong> &#8212; это будет компонент для визуального редактирования <strong>html</strong>.<br />
+Он будет размещен на первой вкладке.<br />
+3.1.3. <strong>JEditorPane plainTextPane</strong> &#8212; это будет компонент для редактирования <strong>html</strong> в виде текста, он будет отображать код <strong>html</strong> (<em>теги и их содержимое</em>).<br />
+3.2. Добавь класс <span class="text-corporate"><strong>FrameListener</strong></span> в пакет <mark class="user">listeners</mark>. Он должен:<br />
+3.2.1. Быть унаследован от <span class="text-corporate"><strong>WindowAdapter</strong></span>.<br />
+3.2.2. Иметь поле <span class="text-corporate"><strong>View</strong></span> <mark class="user">view</mark>.<br />
+3.2.3. В конструкторе принимать <span class="text-corporate"><strong>View</strong></span> и инициализировать внутреннее поле.<br />
+3.2.4. Иметь переопределенный метод <mark>windowClosing(WindowEvent <strong>windowEvent</strong>)</mark>, который должен вызывать <mark>exit()</mark> у представления.</p>
+
+<hr>
+<h3>HTML Editor (2)</h3>
+<p>2.1. Добавь в контроллер и представление по методу <mark>init()</mark>, пока без реализаций. Они будут отвечать за инициализацию контроллера и представления.<br />
+2.2. Теперь напишем в классе <span class="text-corporate"><strong>Controller</strong></span> метод <mark>main()</mark>. Он должен:<br />
+2.2.1. Создавать объект представления.<br />
+2.2.2. Создавать контроллер, используя представление.<br />
+2.2.3. Устанавливать у представления контроллер.<br />
+2.2.4. Инициализировать представление.<br />
+2.2.5. Инициализировать контроллер. Контроллер должен инициализироваться после представления.<br />
+2.3. Добавь в контроллер метод <mark>exit()</mark>, он должен вызывать статический метод exit у класса<br />
+<span class="text-corporate"><strong>System</strong></span>.<br />
+2.4. Добавь в представление метод <mark>exit()</mark>, он должен вызывать <mark>exit()</mark> у контроллера.</p>
+
+<hr>
+<h3>HTML Editor (1)</h3>
+<p>Сегодня мы напишем <strong>HTML</strong> редактор с графическим интерфейсом. В качестве библиотеки для<br />
+создания графического интерфейса воспользуемся <strong><span class="text-corporate">Swing</span></strong>. А в качестве архитектурного каркаса<br />
+нашего приложения будем использовать <strong>MVC</strong> модель.<br />
+1.1. Объяви класс <span class="text-corporate"><strong>Controller</strong></span> и класс <span class="text-corporate"><strong>View</strong></span>. Класс <span class="text-corporate"><strong>View</strong></span> должен быть унаследован от <span class="text-corporate"><strong>JFrame</strong></span> и реализовывать интерфейс <span class="text-yellow"><strong>ActionListener</strong></span>.<br />
+1.2. Добавь в класс <span class="text-corporate"><strong>Controller</strong></span> поля, отвечающие за представление <span class="text-corporate"><strong>View</strong> </span><mark class="user">view</mark> и модель <strong><span class="text-corporate">HTMLDocument</span></strong> <mark class="user">document</mark>. Здесь и далее, классы, которые мы не объявляли, но используем в коде скорее всего все находятся в библиотеке <span class="text-corporate"><strong>swing</strong></span>. Например, класс <span class="text-corporate"><strong>HTMLDocument</strong></span> реализован в пакете <em><strong>javax.swing.text.html.</strong></em><br />
+1.3. Добавь в класс <span class="text-corporate"><strong>Controller</strong></span> поле, которое будет отвечать за файл, который сейчас открыт в нашем редакторе (<em>текущий файл</em>) <span class="text-corporate"><strong>File</strong></span> <mark class="user">currentFile</mark>.<br />
+1.4. Добавь конструктор класса <span class="text-corporate"><strong>Controller</strong></span>. Он должен принимать в качестве параметра представление и инициализировать соответствующее поле класса.<br />
+1.5. Добавь в <span class="text-corporate"><strong>Controller</strong></span> пустой метод <mark>main</mark>.<br />
+1.6. Добавь в класс <span class="text-corporate"><strong>View</strong></span> поле <span class="text-corporate"><strong>Controller</strong></span> <mark class="user">controller</mark>.<br />
+1.7. Добавь в класс <span class="text-corporate"><strong>View</strong></span> <strong>сеттер</strong> и <strong>геттер</strong> для поля <mark class="user">controller</mark>.<br />
+1.8. Добавь пустую реализацию метода, который объявлен в интерфейсе <strong><span class="text-yellow">ActionListener</span></strong>.</p>
+
+</div>
