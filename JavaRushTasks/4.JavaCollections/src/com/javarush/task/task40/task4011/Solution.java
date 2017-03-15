@@ -10,10 +10,10 @@ import java.net.URL;
 
 public class Solution {
     public static void main(String[] args) throws IOException {
-        decodeAndPrintURLString("https://www.amrood.com/index.htm?language=en#j2se");
+        decodeURLString("https://www.amrood.com/index.htm?language=en#j2se");
     }
 
-    public static void decodeAndPrintURLString(String s) {
+    public static void decodeURLString(String s) {
         try {
             URL url = new URL(s);
             System.out.println("—" + url.getProtocol());

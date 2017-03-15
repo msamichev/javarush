@@ -11,26 +11,23 @@ import java.util.List;
  */
 public class Test {
     public static void main(String[] args) throws IOException {
-        File file = new File("C:\\temp\\vah2.txt");
-        file.deleteOnExit();
-        Files.createFile(file.toPath());
-        Path path = Files.createTempFile(null, null);
-        System.out.println(Files.exists(path));
-        //Files.createFile(path);
-
-        System.out.println(path.toAbsolutePath().toString());
-
-        String[] s = new  String[10];
+        A a= new B();
+        a.m();
+        ((B)a).m();
+     }
 
 
+     public static class A{
+         private void m(){
+             System.out.println("A");
+         }
 
-        for (String s1 : s) {
+     }
 
-        }
-
-
-        List l = new ArrayList();
-
+     public static class B extends A{
+         public void m(){
+             System.out.println("B");
+         }
      }
 
 }
