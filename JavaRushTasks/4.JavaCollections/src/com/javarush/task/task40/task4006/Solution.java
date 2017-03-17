@@ -1,10 +1,8 @@
 package com.javarush.task.task40.task4006;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 
@@ -19,18 +17,20 @@ public class Solution {
 
     public static void getSite(URL url) {
         try {
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            String host = url.getHost();
+            int port = url.getPort() == -1 ? 80 : url.getPort();
 
-            connection.setRequestMethod("GET");
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            Socket socket = new Socket(host, port);
+            PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+            printWriter.println("GET " + url.getFile());
+            printWriter.flush();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String responseLine;
-
             while ((responseLine = bufferedReader.readLine()) != null) {
                 System.out.println(responseLine);
             }
+            printWriter.close();
             bufferedReader.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

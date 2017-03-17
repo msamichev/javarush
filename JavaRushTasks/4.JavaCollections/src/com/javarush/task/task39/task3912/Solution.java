@@ -23,11 +23,11 @@ public class Solution {
 
     }
 
-    public int maxSquare(int[][] matrix) {
+    public static  int maxSquare(int[][] matrix) {
 
-//        if (matrix == null || matrix.length == 0) {
-//            return 0;
-//        }
+        if (matrix == null || matrix.length == 0) {
+            return 0;
+        }
         int m = matrix.length;
         int n = matrix[0].length;
         int side = 0;
