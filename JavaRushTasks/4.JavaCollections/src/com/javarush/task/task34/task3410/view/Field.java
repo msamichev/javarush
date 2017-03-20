@@ -1,11 +1,13 @@
 package com.javarush.task.task34.task3410.view;
 
 import com.javarush.task.task34.task3410.controller.EventListener;
+import com.javarush.task.task34.task3410.model.GameObject;
 import com.javarush.task.task34.task3410.model.Home;
 import com.javarush.task.task34.task3410.model.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Set;
 
 /**
  *
@@ -20,12 +22,14 @@ public class Field extends JPanel {
     }
 
     public void paint(Graphics g){
-        Player player = new Player(10, 10);
-        player.draw(g);
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 500, 500);
 
-        Home home = new Home(100 ,100);
-        home.draw(g);
+        Set<GameObject> gameObjectSet = view.getGameObjects().getAll();
 
+        for (GameObject gameObject : gameObjectSet) {
+            gameObject.draw(g);
+        }
     }
 
     public void setEventListener(EventListener eventListener)
