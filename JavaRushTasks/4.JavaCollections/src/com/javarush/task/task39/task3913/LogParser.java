@@ -96,7 +96,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return true;
     }
 
-
     @Override
     public Set<String> getAllUsers() {
         Set<String> users = new HashSet<>();
@@ -501,7 +500,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return criteria;
     }
 
-
     public Set<String> getAllIps(String field, String value, Date after, Date before) {
         Set<String> users = new HashSet<>();
         for (LogRecord record : getParsedRecords(logDir)) {
@@ -569,7 +567,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                     users.add(record.getUser());
                 }
             } catch (ParseException e) {
-               //e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return users;
@@ -578,13 +576,13 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
     @Override
     public Set<Object> execute(String query) {
         Set<Object> res = new HashSet<>();
+        if (query == null || query.isEmpty()) return res;
 
         Pattern p = Pattern.compile("get (ip|user|date|event|status)"
                 + "( for (ip|user|date|event|status) = \"(.*?)\")?"
                 + "( and date between \"(.*?)\" and \"(.*?)\")?");
 
 
-        // Now create matcher object.
         Matcher m = p.matcher(query);
 
         String field1 = null;
@@ -597,33 +595,43 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
             field1 = m.group(1);
             field2 = m.group(3);
             value1 = m.group(4);
-        } else {
-            System.out.println("NO MATCH");
-        }
+            String d1 = m.group(6);
+            String d2 = m.group(7);
 
-        switch (field1) {
-            case "ip": {
-                res.addAll(getAllIps(field2, value1, dateFrom, dateTo));
-                break;
+            try {
+                dateFrom = new SimpleDateFormat("d.M.yyyy H:m:s").parse(d1);
+            } catch (Exception e) {
+                dateFrom = null;
             }
-            case "user": {
-                res.addAll(getAllUsers(field2, value1, dateFrom, dateTo));
-                break;
+            try {
+                dateTo = new SimpleDateFormat("d.M.yyyy H:m:s").parse(d2);
+            } catch (Exception e) {
+                dateTo = null;
             }
-            case "date": {
-                res.addAll(getAllDates(field2, value1, dateFrom, dateTo));
-                break;
-            }
-            case "event": {
-                res.addAll(getAllEvents(field2, value1, dateFrom, dateTo));
-                break;
-            }
-            case "status": {
-                res.addAll(getAllStatuses(field2, value1, dateFrom, dateTo));
-                break;
+
+            switch (field1) {
+                case "ip": {
+                    res.addAll(getAllIps(field2, value1, dateFrom, dateTo));
+                    break;
+                }
+                case "user": {
+                    res.addAll(getAllUsers(field2, value1, dateFrom, dateTo));
+                    break;
+                }
+                case "date": {
+                    res.addAll(getAllDates(field2, value1, dateFrom, dateTo));
+                    break;
+                }
+                case "event": {
+                    res.addAll(getAllEvents(field2, value1, dateFrom, dateTo));
+                    break;
+                }
+                case "status": {
+                    res.addAll(getAllStatuses(field2, value1, dateFrom, dateTo));
+                    break;
+                }
             }
         }
-
         return res;
     }
 
