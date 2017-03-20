@@ -19,19 +19,72 @@ public class LevelLoader {
     }
 
     public GameObjects getLevel(int level) {
+        while (level > 60) {
+            level = level - 60;
+        }
 
         Set<Wall> walls = new HashSet<>();
         Set<Box> boxes = new HashSet<>();
         Set<Home> homes = new HashSet<>();
         Player player = null;
 
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(levels.toString()));
 
-        player = new Player(6 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, 6 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2);
-        homes.add(new Home(3 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, 3 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2));
-        boxes.add(new Box(2 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, 2 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2));
-        walls.add(new Wall(1 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, 1 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2));
-        walls.add(new Wall(7 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, 7 * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2));
+            while (true) {
+                String lev = br.readLine();
+                if (lev.equals("Maze: " + level)) {
+                    break;
+                }
+            }
 
+            br.readLine();
+
+            String[] sizeX = br.readLine().split(" ");
+            String[] sizeY = br.readLine().split(" ");
+
+            int weight = Integer.parseInt(sizeX[2]);
+            int height = Integer.parseInt(sizeY[2]);
+
+            br.readLine();
+            br.readLine();
+            br.readLine();
+
+            for (int y = 0; y < height; y++) {
+
+                String line = br.readLine();
+                char[] chars = line.toCharArray();
+
+                for (int x = 0; x < weight; x++) {
+                    char aChar = chars[x];
+
+                    switch (aChar) {
+
+                        case ' ':
+                            break;
+                        case 'X':
+                            walls.add(new Wall(x * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, y * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2));
+                            break;
+                        case '*':
+                            boxes.add(new Box(x * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, y * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2));
+                            break;
+                        case '.':
+                            homes.add(new Home(x * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, y * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2));
+                            break;
+                        case '&':
+                            boxes.add(new Box(x * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, y * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2));
+                            homes.add(new Home(x * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, y * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2));
+                            break;
+                        case '@':
+                            player = new Player(x * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2, y * Model.FIELD_SELL_SIZE + Model.FIELD_SELL_SIZE / 2);
+                            break;
+                    }
+
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return new GameObjects(walls, boxes, homes, player);
     }
