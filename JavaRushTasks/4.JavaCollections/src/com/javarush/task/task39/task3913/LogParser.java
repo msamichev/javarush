@@ -1,9 +1,6 @@
 package com.javarush.task.task39.task3913;
 
-import com.javarush.task.task39.task3913.query.DateQuery;
-import com.javarush.task.task39.task3913.query.EventQuery;
-import com.javarush.task.task39.task3913.query.IPQuery;
-import com.javarush.task.task39.task3913.query.UserQuery;
+import com.javarush.task.task39.task3913.query.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +9,10 @@ import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
+public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQuery {
 
     private Path logDir;
 
@@ -470,6 +469,97 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
             }
         }
         return taskSolved;
+    }
+
+
+    public Set<Date> getAllDates(Date after, Date before) {
+        Set<Date> dates = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            if (isDateInside(after, before, record.getDate())) {
+                dates.add(record.date);
+            }
+
+        }
+        return dates;
+    }
+
+    public Set<Status> getAllStatuses(Date after, Date before) {
+        Set<Status> set = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            if (isDateInside(after, before, record.getDate())) {
+                set.add(record.getStatus());
+            }
+
+        }
+        return set;
+    }
+
+    public Set<String> getAllUsers(Date after, Date before) {
+        Set<String> users = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            if (isDateInside(after, before, record.getDate()) && !users.contains(record.getUser())) {
+                users.add(record.getUser());
+            }
+        }
+        return users;
+    }
+
+    @Override
+    public Set<Object> execute(String query) {
+        Set<Object> res = new HashSet<>();
+
+        Pattern p = Pattern.compile("get (ip|user|date|event|status)"
+                + "( for (ip|user|date|event|status) = \"(.*?)\")?"
+                + "( and date between \"(.*?)\" and \"(.*?)\")?");
+
+
+        // Now create matcher object.
+        Matcher m = p.matcher(query);
+
+        String getObj = null;
+        String forObj;
+        Date dateFrom = null;
+        Date dateTo = null;
+
+        if (m.find()) {
+//            System.out.println("Found value: " + m.group(0));
+//            System.out.println("Found value: " + m.group(1));
+//            System.out.println("Found value: " + m.group(2));
+//            System.out.println("Found value: " + m.group(3));
+//            System.out.println("Found value: " + m.group(4));
+//            System.out.println("Found value: " + m.group(5));
+//            System.out.println("Found value: " + m.group(6));
+
+            getObj = m.group(1);
+        } else {
+            System.out.println("NO MATCH");
+        }
+
+        switch (getObj) {
+            case "ip": {
+                res.addAll(getUniqueIPs(dateFrom, dateTo));
+                break;
+            }
+            case "user": {
+                res.addAll(getAllUsers(dateFrom, dateTo));
+                break;
+            }
+            case "date": {
+                res.addAll(getAllDates(dateFrom, dateTo));
+                break;
+            }
+            case "event": {
+                res.addAll(getAllEvents(dateFrom, dateTo));
+                break;
+            }
+            case "status": {
+                res.addAll(getAllStatuses(dateFrom, dateTo));
+                break;
+            }
+        }
+
+
+        return res;
     }
 
 

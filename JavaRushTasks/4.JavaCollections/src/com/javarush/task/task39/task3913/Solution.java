@@ -14,6 +14,11 @@ public class Solution {
         System.out.println(logParser.getIPsForUser("Eduard Petrovich Morozko", null, null));
         System.out.println(logParser.getUniqueIPs(new SimpleDateFormat("dd.MM.yyyy").parse("21.12.2012"), new SimpleDateFormat("dd.MM.yyyy").parse("14.10.2021")));
         System.out.println(logParser.getNumberOfUserEvents("Vasya Pupkin", null, null));
+        System.out.println(logParser.execute("get ip"));
+        System.out.println(logParser.execute("get user"));
+        System.out.println(logParser.execute("get date"));
+        System.out.println(logParser.execute("get event"));
+        System.out.println(logParser.execute("get status"));
 
     }
 }
