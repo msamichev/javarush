@@ -19,6 +19,12 @@ public class Solution {
         System.out.println(logParser.execute("get date"));
         System.out.println(logParser.execute("get event"));
         System.out.println(logParser.execute("get status"));
+        System.out.println(logParser.execute("get ip for status = \"ERROR\""));
+        System.out.println(logParser.execute("get ip for user = \"Amigo\""));
+        System.out.println(logParser.execute("get ip for date = \"\""));
+
+
+
 
     }
 }

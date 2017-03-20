@@ -471,34 +471,105 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return taskSolved;
     }
 
+    private boolean isFieldMatch(String field, String value, LogRecord record) throws ParseException {
+        boolean criteria = false;
+        if (field == null) return true;
+        if (value == null) return false;
 
-    public Set<Date> getAllDates(Date after, Date before) {
+        switch (field) {
+            case "ip": {
+                criteria = record.getIp().equals(value);
+                break;
+            }
+            case "user": {
+                criteria = record.getUser().equals(value);
+                break;
+            }
+            case "date": {
+                criteria = record.getDate().equals(new SimpleDateFormat("d.M.yyyy H:m:s").parse(value));
+                break;
+            }
+            case "event": {
+                criteria = record.getEvent().equals(Event.valueOf(value));
+                break;
+            }
+            case "status": {
+                criteria = record.getStatus().equals(Status.valueOf(value));
+                break;
+            }
+        }
+        return criteria;
+    }
+
+
+    public Set<String> getAllIps(String field, String value, Date after, Date before) {
+        Set<String> users = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    users.add(record.getIp());
+                }
+            } catch (ParseException e) {
+                //e.printStackTrace();
+            }
+        }
+        return users;
+    }
+
+    public Set<Date> getAllDates(String field, String value, Date after, Date before) {
         Set<Date> dates = new HashSet<>();
         for (LogRecord record : getParsedRecords(logDir)) {
-            if (isDateInside(after, before, record.getDate())) {
-                dates.add(record.date);
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    dates.add(record.date);
+                }
+            } catch (ParseException e) {
+                //e.printStackTrace();
             }
 
         }
         return dates;
     }
 
-    public Set<Status> getAllStatuses(Date after, Date before) {
+    public Set<Status> getAllStatuses(String field, String value, Date after, Date before) {
         Set<Status> set = new HashSet<>();
         for (LogRecord record : getParsedRecords(logDir)) {
-            if (isDateInside(after, before, record.getDate())) {
-                set.add(record.getStatus());
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    set.add(record.getStatus());
+                }
+            } catch (ParseException e) {
+                //e.printStackTrace();
             }
 
         }
         return set;
     }
 
-    public Set<String> getAllUsers(Date after, Date before) {
+    public Set<Event> getAllEvents(String field, String value, Date after, Date before) {
+        Set<Event> set = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    set.add(record.getEvent());
+                }
+            } catch (ParseException e) {
+                //e.printStackTrace();
+            }
+
+        }
+        return set;
+    }
+
+    public Set<String> getAllUsers(String field, String value, Date after, Date before) {
         Set<String> users = new HashSet<>();
         for (LogRecord record : getParsedRecords(logDir)) {
-            if (isDateInside(after, before, record.getDate()) && !users.contains(record.getUser())) {
-                users.add(record.getUser());
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    users.add(record.getUser());
+                }
+            } catch (ParseException e) {
+               //e.printStackTrace();
             }
         }
         return users;
@@ -516,48 +587,42 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         // Now create matcher object.
         Matcher m = p.matcher(query);
 
-        String getObj = null;
-        String forObj;
+        String field1 = null;
+        String field2 = null;
+        String value1 = null;
         Date dateFrom = null;
         Date dateTo = null;
 
         if (m.find()) {
-//            System.out.println("Found value: " + m.group(0));
-//            System.out.println("Found value: " + m.group(1));
-//            System.out.println("Found value: " + m.group(2));
-//            System.out.println("Found value: " + m.group(3));
-//            System.out.println("Found value: " + m.group(4));
-//            System.out.println("Found value: " + m.group(5));
-//            System.out.println("Found value: " + m.group(6));
-
-            getObj = m.group(1);
+            field1 = m.group(1);
+            field2 = m.group(3);
+            value1 = m.group(4);
         } else {
             System.out.println("NO MATCH");
         }
 
-        switch (getObj) {
+        switch (field1) {
             case "ip": {
-                res.addAll(getUniqueIPs(dateFrom, dateTo));
+                res.addAll(getAllIps(field2, value1, dateFrom, dateTo));
                 break;
             }
             case "user": {
-                res.addAll(getAllUsers(dateFrom, dateTo));
+                res.addAll(getAllUsers(field2, value1, dateFrom, dateTo));
                 break;
             }
             case "date": {
-                res.addAll(getAllDates(dateFrom, dateTo));
+                res.addAll(getAllDates(field2, value1, dateFrom, dateTo));
                 break;
             }
             case "event": {
-                res.addAll(getAllEvents(dateFrom, dateTo));
+                res.addAll(getAllEvents(field2, value1, dateFrom, dateTo));
                 break;
             }
             case "status": {
-                res.addAll(getAllStatuses(dateFrom, dateTo));
+                res.addAll(getAllStatuses(field2, value1, dateFrom, dateTo));
                 break;
             }
         }
-
 
         return res;
     }
