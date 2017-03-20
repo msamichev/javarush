@@ -500,7 +500,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return criteria;
     }
 
-    public Set<String> getAllIps(String field, String value, Date after, Date before) {
+    private  Set<String> getAllIps(String field, String value, Date after, Date before) {
         Set<String> users = new HashSet<>();
         for (LogRecord record : getParsedRecords(logDir)) {
             try {
@@ -514,7 +514,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return users;
     }
 
-    public Set<Date> getAllDates(String field, String value, Date after, Date before) {
+    private  Set<Date> getAllDates(String field, String value, Date after, Date before) {
         Set<Date> dates = new HashSet<>();
         for (LogRecord record : getParsedRecords(logDir)) {
             try {
@@ -529,7 +529,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return dates;
     }
 
-    public Set<Status> getAllStatuses(String field, String value, Date after, Date before) {
+    private Set<Status> getAllStatuses(String field, String value, Date after, Date before) {
         Set<Status> set = new HashSet<>();
         for (LogRecord record : getParsedRecords(logDir)) {
             try {
@@ -544,7 +544,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return set;
     }
 
-    public Set<Event> getAllEvents(String field, String value, Date after, Date before) {
+    private Set<Event> getAllEvents(String field, String value, Date after, Date before) {
         Set<Event> set = new HashSet<>();
         for (LogRecord record : getParsedRecords(logDir)) {
             try {
@@ -559,7 +559,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return set;
     }
 
-    public Set<String> getAllUsers(String field, String value, Date after, Date before) {
+    private Set<String> getAllUsers(String field, String value, Date after, Date before) {
         Set<String> users = new HashSet<>();
         for (LogRecord record : getParsedRecords(logDir)) {
             try {
@@ -634,7 +634,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         }
         return res;
     }
-
 
     private class LogRecord {
         private String ip;
