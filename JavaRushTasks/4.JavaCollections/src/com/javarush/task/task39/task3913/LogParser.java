@@ -45,56 +45,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return getIpSet(status, after, before);
     }
 
-    private Set<String> getIpSet(Object recordField, Date after, Date before) {
-        Set<String> ipSet = new HashSet<>();
-        for (LogRecord record : getParsedRecords(logDir)) {
-            if (isDateInside(after, before, record.getDate()) && isFieldMatch(recordField, record)) {
-                ipSet.add(record.getIp());
-            }
-
-        }
-        return ipSet;
-    }
-
-    private List<LogRecord> getParsedRecords(Path logDir) {
-        List<LogRecord> recordList = new ArrayList<>();
-        try {
-            for (File file : logDir.toFile().listFiles()) {
-                if (file.isFile() && file.getName().toLowerCase().endsWith(".log"))
-                    for (String record : Files.readAllLines(file.toPath())) {
-                        recordList.add(new LogRecord(record));
-                    }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return recordList;
-    }
-
-    private boolean isFieldMatch(Object recordField, LogRecord record) {
-        boolean criteria = false;
-        if (recordField == null)
-            return true;
-        if (recordField instanceof String)
-            criteria = record.getUser().equals(recordField);
-        else if (recordField instanceof Event)
-            criteria = record.getEvent().equals(recordField);
-        else if (recordField instanceof Status)
-            criteria = record.getStatus().equals(recordField);
-        return criteria;
-    }
-
-    private boolean isDateInside(Date after, Date before, Date currentDate) {
-        if (after != null) {
-            if (currentDate.getTime() < after.getTime())
-                return false;
-        }
-        if (before != null) {
-            if (currentDate.getTime() > before.getTime())
-                return false;
-        }
-        return true;
-    }
 
     @Override
     public Set<String> getAllUsers() {
@@ -470,109 +420,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         return taskSolved;
     }
 
-    private boolean isFieldMatch(String field, String value, LogRecord record) throws ParseException {
-        boolean criteria = false;
-        if (field == null) return true;
-        if (value == null) return false;
-
-        switch (field) {
-            case "ip": {
-                criteria = record.getIp().equals(value);
-                break;
-            }
-            case "user": {
-                criteria = record.getUser().equals(value);
-                break;
-            }
-            case "date": {
-                criteria = record.getDate().equals(new SimpleDateFormat("d.M.yyyy H:m:s").parse(value));
-                break;
-            }
-            case "event": {
-                criteria = record.getEvent().equals(Event.valueOf(value));
-                break;
-            }
-            case "status": {
-                criteria = record.getStatus().equals(Status.valueOf(value));
-                break;
-            }
-        }
-        return criteria;
-    }
-
-    private  Set<String> getAllIps(String field, String value, Date after, Date before) {
-        Set<String> users = new HashSet<>();
-        for (LogRecord record : getParsedRecords(logDir)) {
-            try {
-                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
-                    users.add(record.getIp());
-                }
-            } catch (ParseException e) {
-                //e.printStackTrace();
-            }
-        }
-        return users;
-    }
-
-    private  Set<Date> getAllDates(String field, String value, Date after, Date before) {
-        Set<Date> dates = new HashSet<>();
-        for (LogRecord record : getParsedRecords(logDir)) {
-            try {
-                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
-                    dates.add(record.date);
-                }
-            } catch (ParseException e) {
-                //e.printStackTrace();
-            }
-
-        }
-        return dates;
-    }
-
-    private Set<Status> getAllStatuses(String field, String value, Date after, Date before) {
-        Set<Status> set = new HashSet<>();
-        for (LogRecord record : getParsedRecords(logDir)) {
-            try {
-                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
-                    set.add(record.getStatus());
-                }
-            } catch (ParseException e) {
-                //e.printStackTrace();
-            }
-
-        }
-        return set;
-    }
-
-    private Set<Event> getAllEvents(String field, String value, Date after, Date before) {
-        Set<Event> set = new HashSet<>();
-        for (LogRecord record : getParsedRecords(logDir)) {
-            try {
-                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
-                    set.add(record.getEvent());
-                }
-            } catch (ParseException e) {
-                //e.printStackTrace();
-            }
-
-        }
-        return set;
-    }
-
-    private Set<String> getAllUsers(String field, String value, Date after, Date before) {
-        Set<String> users = new HashSet<>();
-        for (LogRecord record : getParsedRecords(logDir)) {
-            try {
-                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
-                    users.add(record.getUser());
-                }
-            } catch (ParseException e) {
-                //e.printStackTrace();
-            }
-        }
-        return users;
-    }
-
     @Override
     public Set<Object> execute(String query) {
         Set<Object> res = new HashSet<>();
@@ -633,6 +480,160 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
             }
         }
         return res;
+    }
+
+    private boolean isFieldMatch(String field, String value, LogRecord record) throws ParseException {
+        boolean criteria = false;
+        if (field == null) return true;
+        if (value == null) return false;
+
+        switch (field) {
+            case "ip": {
+                criteria = record.getIp().equals(value);
+                break;
+            }
+            case "user": {
+                criteria = record.getUser().equals(value);
+                break;
+            }
+            case "date": {
+                criteria = record.getDate().equals(new SimpleDateFormat("d.M.yyyy H:m:s").parse(value));
+                break;
+            }
+            case "event": {
+                criteria = record.getEvent().equals(Event.valueOf(value));
+                break;
+            }
+            case "status": {
+                criteria = record.getStatus().equals(Status.valueOf(value));
+                break;
+            }
+        }
+        return criteria;
+    }
+
+    private Set<String> getAllIps(String field, String value, Date after, Date before) {
+        Set<String> users = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    users.add(record.getIp());
+                }
+            } catch (ParseException e) {
+                //e.printStackTrace();
+            }
+        }
+        return users;
+    }
+
+    private Set<Date> getAllDates(String field, String value, Date after, Date before) {
+        Set<Date> dates = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    dates.add(record.date);
+                }
+            } catch (ParseException e) {
+                //e.printStackTrace();
+            }
+
+        }
+        return dates;
+    }
+
+    private Set<Status> getAllStatuses(String field, String value, Date after, Date before) {
+        Set<Status> set = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    set.add(record.getStatus());
+                }
+            } catch (ParseException e) {
+                //e.printStackTrace();
+            }
+
+        }
+        return set;
+    }
+
+    private Set<Event> getAllEvents(String field, String value, Date after, Date before) {
+        Set<Event> set = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    set.add(record.getEvent());
+                }
+            } catch (ParseException e) {
+                //e.printStackTrace();
+            }
+
+        }
+        return set;
+    }
+
+    private Set<String> getAllUsers(String field, String value, Date after, Date before) {
+        Set<String> users = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            try {
+                if (isDateInside(after, before, record.getDate()) && isFieldMatch(field, value, record)) {
+                    users.add(record.getUser());
+                }
+            } catch (ParseException e) {
+                //e.printStackTrace();
+            }
+        }
+        return users;
+    }
+
+    private Set<String> getIpSet(Object recordField, Date after, Date before) {
+        Set<String> ipSet = new HashSet<>();
+        for (LogRecord record : getParsedRecords(logDir)) {
+            if (isDateInside(after, before, record.getDate()) && isFieldMatch(recordField, record)) {
+                ipSet.add(record.getIp());
+            }
+
+        }
+        return ipSet;
+    }
+
+    private List<LogRecord> getParsedRecords(Path logDir) {
+        List<LogRecord> recordList = new ArrayList<>();
+        try {
+            for (File file : logDir.toFile().listFiles()) {
+                if (file.isFile() && file.getName().toLowerCase().endsWith(".log"))
+                    for (String record : Files.readAllLines(file.toPath())) {
+                        recordList.add(new LogRecord(record));
+                    }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return recordList;
+    }
+
+    private boolean isFieldMatch(Object recordField, LogRecord record) {
+        boolean criteria = false;
+        if (recordField == null)
+            return true;
+        if (recordField instanceof String)
+            criteria = record.getUser().equals(recordField);
+        else if (recordField instanceof Event)
+            criteria = record.getEvent().equals(recordField);
+        else if (recordField instanceof Status)
+            criteria = record.getStatus().equals(recordField);
+        return criteria;
+    }
+
+    private boolean isDateInside(Date after, Date before, Date currentDate) {
+        if (after != null) {
+            if (currentDate.getTime() < after.getTime())
+                return false;
+        }
+        if (before != null) {
+            if (currentDate.getTime() > before.getTime())
+                return false;
+        }
+        return true;
     }
 
     private class LogRecord {
