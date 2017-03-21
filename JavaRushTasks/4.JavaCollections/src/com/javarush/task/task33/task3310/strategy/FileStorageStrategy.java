@@ -49,6 +49,11 @@ public class FileStorageStrategy implements StorageStrategy {
         FileBucket[] newTable = new FileBucket[newCapacity];
         transfer(newTable);
         table = newTable;
+        maxBucketSize = 0;
+        for (int i = 0; i < table.length; i++) {
+            long bucketSize = countBucketSize(i);
+            if (bucketSize > maxBucketSize) maxBucketSize = bucketSize;
+        }
     }
 
     private void transfer(FileBucket[] newTable) {
@@ -74,17 +79,32 @@ public class FileStorageStrategy implements StorageStrategy {
     private void addEntry(int hash, Long key, String value, int bucketIndex) {
         Entry entry = table[bucketIndex].getEntry();
         table[bucketIndex].putEntry(new Entry(hash, key, value, entry));
-        if (table[bucketIndex].getFileSize() > bucketSizeLimit) resize(2 * table.length);
         size++;
-        maxBucketSize++;
+        long bucketSize = countBucketSize(bucketIndex);
+        if (bucketSize > maxBucketSize) maxBucketSize = bucketSize;
+
+        if (table[bucketIndex].getFileSize() > bucketSizeLimit) resize(2 * table.length);
     }
 
     private void createEntry(int hash, Long key, String value, int bucketIndex) {
         table[bucketIndex] = new FileBucket();
         table[bucketIndex].putEntry(new Entry(hash, key, value, null));
         size++;
-        maxBucketSize++;
+        long bucketSize = countBucketSize(bucketIndex);
+        if (bucketSize > maxBucketSize) maxBucketSize = bucketSize;
     }
+
+    private long countBucketSize(int bucketIndex) {
+        long res = 0;
+        if (table[bucketIndex] == null) return res;
+        Entry entry = table[bucketIndex].getEntry();
+        while (entry != null) {
+            res++;
+            entry = entry.next;
+        }
+        return res;
+    }
+
 
     @Override
     public boolean containsKey(Long key) {
@@ -150,6 +170,11 @@ public class FileStorageStrategy implements StorageStrategy {
 
     public void setBucketSizeLimit(long bucketSizeLimit) {
         this.bucketSizeLimit = bucketSizeLimit;
+    }
+
+
+    public long getMaxBucketSize() {
+        return maxBucketSize;
     }
 
 }
