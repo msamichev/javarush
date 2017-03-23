@@ -11,7 +11,7 @@ public class Solution {
     public static void main(String[] args) {
         System.out.println(isLeap(LocalDate.of(2016, 1, 1)));
         System.out.println(isBefore(LocalDateTime.MIN));
-        System.out.println(addDate(LocalTime.of(10, 10), 10, ChronoUnit.MINUTES));
+        System.out.println(addTime (LocalTime.of(10, 10), 10, ChronoUnit.MINUTES));
         System.out.println(getPeriodBetween(LocalDate.of(2016, 3, 1), LocalDate.of(2016, 1, 1)));
     }
 
@@ -20,10 +20,10 @@ public class Solution {
     }
 
     public static boolean isBefore(LocalDateTime dateTime) {
-        return LocalDateTime.now().isAfter(dateTime);
+        return dateTime.isBefore(LocalDateTime.now());
     }
 
-    public static LocalTime addDate(LocalTime time, int n, ChronoUnit chronoUnit) {
+    public static LocalTime addTime(LocalTime time, int n, ChronoUnit chronoUnit) {
         return time.plus(n, chronoUnit);
     }
 
