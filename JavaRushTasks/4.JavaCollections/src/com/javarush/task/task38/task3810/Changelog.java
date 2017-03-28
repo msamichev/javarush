@@ -6,5 +6,5 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Changelog {
-    Revision[] value();
+    Revision[] value() default {};
 }
